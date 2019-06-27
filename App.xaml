@@ -4,6 +4,22 @@
              xmlns:local="clr-namespace:TwitchGUI"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PresentationFramework.Aerolite, Version=4.0.0.0,
+        Culture=neutral, PublicKeyToken=31bf3856ad364e35;component/themes/aerolite.normalcolor.xaml" />
+                <ResourceDictionary
+                        Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                <ResourceDictionary
+                        Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary
+                        Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary
+                        Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.DeepPurple.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="DarkBackgroundColor" Color="#FF2B2B2B" />
+            <SolidColorBrush x:Key="LightForgroundColor" Color="#FF9B9B9B" />
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -4,9 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TwitchGUI"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        mc:Ignorable="d" Title="Twitch GUI" Height="550" Width="650" MinWidth="650" MinHeight="550"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
+        Background="{DynamicResource DarkBackgroundColor}">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <local:Toolbar Grid.ColumnSpan="2" VerticalAlignment="Top" />
+        <local:ChannelList HorizontalAlignment="Left" Grid.Row="1" MinWidth="200" Margin="5,5,0,5" />
+        <local:ChannelInfoPanel Grid.Row="1"
+                Grid.Column="1" Margin="5" />
+
     </Grid>
 </Window>

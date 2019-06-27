@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="TwitchGUI.Main.ChannelInfoToolbar"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:TwitchGUI.Main"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" mc:Ignorable="d" d:DesignHeight="50"
+        d:DesignWidth="600">
+    <StackPanel Orientation="Horizontal">
+        <Button Height="Auto" Margin="5">
+            <materialDesign:PackIcon Kind="Play" Width="Auto" Height="16" />
+        </Button>
+        <Button Height="Auto" Margin="5">
+            <materialDesign:PackIcon Kind="Download" Width="Auto" Height="16" />
+        </Button>
+        <Button Height="Auto" Margin="5">
+            <materialDesign:PackIcon Kind="Chat" Width="Auto" Height="16" />
+        </Button>
+        <Button Height="Auto" Margin="5">
+            <materialDesign:PackIcon Kind="Twitch" Width="Auto" Height="16" />
+        </Button>
+    </StackPanel>
+</UserControl>

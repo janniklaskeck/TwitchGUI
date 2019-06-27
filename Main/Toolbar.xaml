@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="TwitchGUI.Toolbar" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:TwitchGUI"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" mc:Ignorable="d" d:DesignHeight="50"
+        d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal">
+            <Button Margin="5">
+                <materialDesign:PackIcon Kind="PersonAdd" Width="Auto" Height="Auto" />
+            </Button>
+            <Button Margin="5">
+                <materialDesign:PackIcon Kind="Minus" Width="Auto" Height="Auto" />
+            </Button>
+            <Button Margin="5">
+                <materialDesign:PackIcon Kind="GroupAdd" Width="Auto" Height="Auto" />
+            </Button>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Orientation="Horizontal">
+            <ComboBox Foreground="{DynamicResource LightForgroundColor}" MinWidth="100" Margin="5" />
+            <Button Margin="5">
+                <materialDesign:PackIcon Kind="Settings" Width="Auto" Height="Auto" />
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</UserControl>
