@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TwitchGUI
 {
@@ -19,5 +15,6 @@ namespace TwitchGUI
         public int viewer_count;
         public string language;
         public string thumbnail_url;
+        public string started_at;
     }
 }

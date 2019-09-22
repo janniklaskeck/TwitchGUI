@@ -1,28 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Win32;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TwitchGUI
 {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
     /// </summary>
-    public partial class SettingsWindow : UserControl
+    public partial class SettingsWindow : Window
     {
         public SettingsWindow()
         {
             InitializeComponent();
+        }
+
+        private void ChooseStreamlinkPath(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog
+            {
+                Title = "Choose Streamlink .exe file",
+                InitialDirectory = @"C:\",
+                RestoreDirectory = true,
+                DefaultExt = "exe",
+                Filter = "Executable files (*.exe)|*.exe",
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                Settings.Instance.StreamlinkLocation = dialog.FileName;
+            }
         }
     }
 }

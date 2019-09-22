@@ -1,7 +1,8 @@
 ﻿<UserControl x:Class="TwitchGUI.Toolbar" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:TwitchGUI"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:local="clr-namespace:TwitchGUI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" mc:Ignorable="d" d:DesignHeight="50"
         d:DesignWidth="600">
     <Grid>
@@ -11,19 +12,30 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal">
-            <Button Margin="5">
+            <Button x:Name="AddChannelButton" Margin="5" Click="AddChannelButton_Click">
                 <materialDesign:PackIcon Kind="PersonAdd" Width="Auto" Height="Auto" />
             </Button>
-            <Button Margin="5">
+            <Button x:Name="RemoveChannelButton" Margin="5" Click="RemoveChannelButton_Click">
                 <materialDesign:PackIcon Kind="Minus" Width="Auto" Height="Auto" />
             </Button>
-            <Button Margin="5">
+            <Button x:Name="AddFollowedChannelsButton" Margin="5" Click="AddFollowedChannelsButton_Click">
                 <materialDesign:PackIcon Kind="GroupAdd" Width="Auto" Height="Auto" />
             </Button>
+            <fa:ImageAwesome x:Name="ProgressCircle" Icon="CircleOutlineNotch" Spin="True" Height="32" Width="32" Foreground="#FF6441A4" Visibility="Hidden" />
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Orientation="Horizontal">
-            <ComboBox Foreground="{DynamicResource LightForgroundColor}" MinWidth="100" Margin="5" />
-            <Button Margin="5">
+            <ComboBox x:Name="QualityComboBox" Foreground="{DynamicResource LightForgroundColor}" MinWidth="100"
+                    Margin="5" SelectionChanged="QualityComboBox_SelectionChanged">
+                <ComboBoxItem Content="audio_only" />
+                <ComboBoxItem Content="160p" />
+                <ComboBoxItem Content="360p" />
+                <ComboBoxItem Content="480p" />
+                <ComboBoxItem Content="720p" />
+                <ComboBoxItem Content="720p60" />
+                <ComboBoxItem Content="1080p60" />
+                <ComboBoxItem Content="best" />
+            </ComboBox>
+            <Button x:Name="SettingsButton" Margin="5" Click="SettingsButton_Click">
                 <materialDesign:PackIcon Kind="Settings" Width="Auto" Height="Auto" />
             </Button>
         </StackPanel>

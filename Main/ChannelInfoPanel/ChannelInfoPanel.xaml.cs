@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TwitchGUI
 {
@@ -23,6 +11,18 @@ namespace TwitchGUI
         public ChannelInfoPanel()
         {
             InitializeComponent();
+            ChannelList.onSelectionChanged += UpdateInfo;
+            MainWindow.onChannelsUpdateFinished += UpdateInfo;
+        }
+
+        private void UpdateInfo()
+        {
+            var channel = ChannelList.SelectedChannel;
+            infoTexts.SetTexts(channel);
+            if (channel == null)
+                return;
+            image.Dispatcher.BeginInvoke(new Action(() => image.Source = channel.PreviewImage));
+            image.UpdateLayout();
         }
     }
 }

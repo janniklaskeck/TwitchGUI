@@ -11,9 +11,9 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Main:ChannelInfoToolbar HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,5" />
+        <Main:ChannelInfoToolbar x:Name="toolbar"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,5" />
         <Image x:Name="image" Grid.Row="1" />
-        <Main:ChannelInfoTexts VerticalAlignment="Bottom" Grid.Row="2" />
+        <Main:ChannelInfoTexts x:Name="infoTexts"  VerticalAlignment="Bottom" Grid.Row="2" Margin="5,0,5,5"/>
 
     </Grid>
 </UserControl>

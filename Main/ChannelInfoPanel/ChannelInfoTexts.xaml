@@ -7,22 +7,25 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top">
             <DockPanel Margin="0,0,0,5">
-                <materialDesign:PackIcon Kind="GamepadVariant" Width="Auto" Height="16"
+                <materialDesign:PackIcon Kind="GamepadVariant" Width="20" Height="20"
                         Foreground="{DynamicResource LightForgroundColor}" />
-                <TextBlock TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource LightForgroundColor}" />
+                <TextBlock x:Name="GameNameTextBlock" TextWrapping="Wrap" Text="No Channel selected"
+                        Foreground="{DynamicResource LightForgroundColor}" FontSize="14" VerticalAlignment="Center" />
             </DockPanel>
             <DockPanel Margin="0,0,0,5">
-                <materialDesign:PackIcon Kind="Person" Width="Auto" Height="16"
+                <materialDesign:PackIcon Kind="Person" Width="20" Height="20"
                         Foreground="{DynamicResource LightForgroundColor}" />
-                <TextBlock TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource LightForgroundColor}" />
+                <TextBlock x:Name="ViewerCountTextBlock" TextWrapping="Wrap" Text="No Channel selected"
+                        Foreground="{DynamicResource LightForgroundColor}" FontSize="14" VerticalAlignment="Center" />
             </DockPanel>
             <DockPanel Margin="0">
-                <materialDesign:PackIcon Kind="Clock" Width="Auto" Height="16"
+                <materialDesign:PackIcon Kind="Clock" Width="20" Height="20"
                         Foreground="{DynamicResource LightForgroundColor}" />
-                <TextBlock TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource LightForgroundColor}" />
+                <TextBlock x:Name="UptimeTextBlock" TextWrapping="Wrap" Text="No Channel selected"
+                        Foreground="{DynamicResource LightForgroundColor}" FontSize="14" VerticalAlignment="Center" />
             </DockPanel>
         </StackPanel>
-        <TextBlock TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource LightForgroundColor}"
-                Margin="0,10,0,0" />
+        <TextBlock x:Name="TitleTextBlock" TextWrapping="Wrap" Text="No Channel selected"
+                Foreground="{DynamicResource LightForgroundColor}" Margin="0,10,0,0" FontSize="14" />
     </DockPanel>
 </UserControl>

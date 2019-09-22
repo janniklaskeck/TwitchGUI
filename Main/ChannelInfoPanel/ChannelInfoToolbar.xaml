@@ -6,16 +6,13 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" mc:Ignorable="d" d:DesignHeight="50"
         d:DesignWidth="600">
     <StackPanel Orientation="Horizontal">
-        <Button Height="Auto" Margin="5">
+        <Button x:Name="PlayButton" Height="Auto" Margin="5" Click="PlayButton_Click">
             <materialDesign:PackIcon Kind="Play" Width="Auto" Height="16" />
         </Button>
-        <Button Height="Auto" Margin="5">
-            <materialDesign:PackIcon Kind="Download" Width="Auto" Height="16" />
-        </Button>
-        <Button Height="Auto" Margin="5">
+        <Button x:Name="OpenChatButton" Height="Auto" Margin="5" Click="OpenChatButton_Click">
             <materialDesign:PackIcon Kind="Chat" Width="Auto" Height="16" />
         </Button>
-        <Button Height="Auto" Margin="5">
+        <Button x:Name="OpenInBrowserButton" Height="Auto" Margin="5" Click="OpenInBrowserButton_Click">
             <materialDesign:PackIcon Kind="Twitch" Width="Auto" Height="16" />
         </Button>
     </StackPanel>

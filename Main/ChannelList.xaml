@@ -1,9 +1,26 @@
-﻿<UserControl x:Class="TwitchGUI.ChannelList" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<UserControl x:Name="ChannelListControl" x:Class="TwitchGUI.ChannelList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:TwitchGUI"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="200">
+    <UserControl.Resources>
+        <Style x:Key="ChannelListStyle" TargetType="{x:Type ListBoxItem}">
+            <EventSetter Event="Control.MouseDoubleClick" Handler="StartStream" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
-        <ListBox />
+        <ListBox x:Name="ChannelListBox" SelectionChanged="ChannelListBox_SelectionChanged"
+                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                ItemContainerStyle="{DynamicResource ChannelListStyle}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Background="{Binding BGColor}">
+                        <TextBlock Text="{Binding DisplayName, FallbackValue=ERROR}" FontSize="14"
+                                Foreground="{DynamicResource LightForgroundColor}" Margin="4" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

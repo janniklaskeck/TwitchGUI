@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TwitchGUI
 {
@@ -23,6 +11,51 @@ namespace TwitchGUI
         public Toolbar()
         {
             InitializeComponent();
+            QualityComboBox.SelectedIndex= Settings.Instance.SelectedQualityIndex;
+
+            MainWindow.onChannelsUpdateStarted += () =>ProgressCircle.Visibility = Visibility.Visible;
+            MainWindow.onChannelsUpdateFinished += () => ProgressCircle.Visibility = Visibility.Hidden;
+        }
+
+        private void AddChannelButton_Click(object sender, RoutedEventArgs e)
+        {
+            var newChannelDialog = new NewChannelDialog();
+            if (newChannelDialog.ShowDialog() == true)
+            {
+                Settings.Instance.AddChannel(newChannelDialog.Answer);
+            }
+        }
+
+        private void RemoveChannelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.Instance.RemoveChannel(ChannelList.SelectedChannel);
+        }
+
+        private void AddFollowedChannelsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new GetFollowedChannelsDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                var followedChannels = dialog.FollowedChannels;
+                if (followedChannels != null)
+                {
+                    foreach (var channel in followedChannels)
+                    {
+                        Settings.Instance.AddChannel(channel);
+                    }
+                }
+            }
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var settings = new SettingsWindow();
+            settings.ShowDialog();
+        }
+
+        private void QualityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.Instance.SelectedQualityIndex = QualityComboBox.SelectedIndex;
         }
     }
 }

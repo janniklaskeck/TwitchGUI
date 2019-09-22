@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TwitchGUI
 {
@@ -20,9 +10,36 @@ namespace TwitchGUI
     /// </summary>
     public partial class ChannelList : UserControl
     {
+        public static TwitchChannel SelectedChannel { get; private set; }
+
+        public static Action onSelectionChanged;
+
         public ChannelList()
         {
             InitializeComponent();
+            ChannelListBox.ItemsSource = Settings.Instance.Channels;
+            MainWindow.onChannelsUpdateFinished += () =>
+            {
+                var view = CollectionViewSource.GetDefaultView(Settings.Instance.Channels);
+                using (view.DeferRefresh())
+                {
+                    view.SortDescriptions.Clear();
+                    view.SortDescriptions.Add(new SortDescription("IsOnline", ListSortDirection.Descending));
+                    view.SortDescriptions.Add(new SortDescription("DisplayName", ListSortDirection.Ascending));
+                }
+                ChannelListBox.Items.Refresh();
+            };
+        }
+
+        private void ChannelListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedChannel = ChannelListBox.SelectedItem as TwitchChannel;
+            onSelectionChanged?.Invoke();
+        }
+
+        private void StartStream(object sender, EventArgs args)
+        {
+            StreamlinkUtils.StartLiveStream(SelectedChannel);
         }
     }
 }
