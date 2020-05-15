@@ -42,7 +42,7 @@ namespace TwitchGUI
             {
                 var startDateTime = DateTime.Parse(StartedAt);
                 var uptime = DateTime.Now - startDateTime;
-                return string.Format("{0:00}:{1:00}:{2} Uptime", uptime.Hours, uptime.Minutes, uptime.Seconds);
+                return string.Format("{0:00}:{1:00}:{2:00} Uptime", uptime.Hours, uptime.Minutes, uptime.Seconds);
             }
         }
         [JsonIgnore]

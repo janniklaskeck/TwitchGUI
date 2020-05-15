@@ -6,7 +6,7 @@ namespace TwitchGUI
     {
         public static void StartLiveStream(TwitchChannel channel)
         {
-            if (channel == null || !channel.IsOnline || string.IsNullOrEmpty(Settings.Instance.StreamlinkLocation))
+            if (channel == null || /*!channel.IsOnline ||*/ string.IsNullOrEmpty(Settings.Instance.StreamlinkLocation))
                 return;
             var process = new Process();
             var startInfo = new ProcessStartInfo

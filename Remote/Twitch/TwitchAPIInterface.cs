@@ -3,8 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace TwitchGUI
@@ -12,16 +17,124 @@ namespace TwitchGUI
     public class TwitchAPIInterface
     {
         private static readonly string TwitchApiBaseUrl = "https://api.twitch.tv/helix/";
-        private static readonly string TwitchGUIClientId = "rfpepzumaxd1iija3ip3fixao6z13pj";
 
         private static readonly HttpClient client = new HttpClient();
+        private static readonly string redirectURL = "http://127.0.0.1:8088/";
+
+        private static TwitchOAuthData data;
+        private static Thread loginListener;
 
         static TwitchAPIInterface()
         {
-            client.DefaultRequestHeaders.Add("Client-ID", TwitchGUIClientId);
         }
 
         private TwitchAPIInterface() { }
+
+        public static async void Login()
+        {
+            if (Settings.Instance.RefreshToken != null)
+            {
+                var dayTicks = new TimeSpan(1, 0, 0, 0).Ticks;
+                bool isTokenPseudoValid = DateTime.Now.Ticks - dayTicks < Settings.Instance.RefreshTokenDate.Ticks;
+                if (isTokenPseudoValid)
+                {
+                    await RefreshAccessToken();
+                    MainWindow.UpdateChannels();
+                    return;
+                }
+            }
+            string url = string.Format("https://id.twitch.tv/oauth2/authorize" +
+                "?client_id={0}" +
+                "&redirect_uri={1}" +
+                "&response_type=code", Settings.Instance.ClientID, redirectURL);
+            if (StartListenerThread())
+            {
+                System.Diagnostics.Process.Start(url);
+            }
+        }
+
+        private static bool StartListenerThread()
+        {
+            int isReady = 0;
+            loginListener = new Thread(() =>
+            {
+                HttpListener listener = new HttpListener();
+                listener.Prefixes.Add(redirectURL);
+                try
+                {
+                    listener.Start();
+                }
+                catch(HttpListenerException exc)
+                {
+                    Console.WriteLine(exc);
+                    isReady = 2;
+                    return;
+                }
+                isReady = 1;
+
+                HttpListenerContext context = listener.GetContext();
+
+                string codeString = context.Request.Url.PathAndQuery;
+                codeString = codeString.Remove(0, 1); // remove leading slash
+                string code = HttpUtility.ParseQueryString(codeString).Get("code");
+                if (code != null && code.Length > 0)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        GetAccessToken(code);
+                    });
+
+                    // Get a response stream and write the response to it.
+                    HttpListenerResponse response = context.Response;
+                    byte[] buffer = System.Text.Encoding.UTF8.GetBytes("Success!");
+                    response.ContentLength64 = buffer.Length;
+                    Stream output = response.OutputStream;
+                    output.Write(buffer, 0, buffer.Length);
+                    output.Close();
+                }
+                listener.Stop();
+            });
+            loginListener.Start();
+            while (true)
+            {
+                if (isReady == 1)
+                    return true;
+                else if (isReady == 2)
+                    return false;
+            }
+        }
+
+        private static async Task GetAccessToken(string code)
+        {
+            string url = string.Format("https://id.twitch.tv/oauth2/token" +
+                "?client_id={0}" +
+                "&client_secret={1}" +
+                "&code={2}" +
+                "&grant_type=authorization_code" +
+                "&redirect_uri={3}", Settings.Instance.ClientID, Settings.Instance.ClientSecret, code, redirectURL);
+            var response = await client.PostAsync(url, null);
+            var responseString = await response.Content.ReadAsStringAsync();
+            data = JsonConvert.DeserializeObject<TwitchOAuthData>(responseString);
+            Settings.Instance.RefreshToken = data.refresh_token;
+            Settings.Instance.RefreshTokenDate = DateTime.Now;
+            UpdateClientHeaders();
+            MainWindow.UpdateChannels();
+        }
+
+        private static async Task RefreshAccessToken()
+        {
+            string url = string.Format("https://id.twitch.tv/oauth2/token" +
+                "?grant_type=refresh_token" +
+                "&client_id={0}" +
+                "&client_secret={1}" +
+                "&refresh_token={2}", Settings.Instance.ClientID, Settings.Instance.ClientSecret, Settings.Instance.RefreshToken);
+            var response = await client.PostAsync(url, null);
+            var responseString = await response.Content.ReadAsStringAsync();
+            data = JsonConvert.DeserializeObject<TwitchOAuthData>(responseString);
+            Settings.Instance.RefreshToken = data.refresh_token;
+            Settings.Instance.RefreshTokenDate = DateTime.Now;
+            UpdateClientHeaders();
+        }
 
         public static async Task UpdateChannels(List<TwitchChannel> channels)
         {
@@ -50,7 +163,7 @@ namespace TwitchGUI
             }
 
             string url = TwitchApiBaseUrl + "users?" + userNameListString;
-            var response = await client.GetStringAsync(url);
+            var response = await HTTPGetSafe(url);
             var users = JsonConvert.DeserializeObject<TwitchUsers>(response);
 
             foreach (var channel in channels)
@@ -81,7 +194,7 @@ namespace TwitchGUI
             }
 
             string url = TwitchApiBaseUrl + "streams?user_id=" + userIdListString;
-            var response = await client.GetStringAsync(url);
+            var response = await HTTPGetSafe(url);
             var streams = JsonConvert.DeserializeObject<TwitchStreams>(response);
 
             foreach (var channel in channels)
@@ -139,7 +252,7 @@ namespace TwitchGUI
             }
 
             string url = TwitchApiBaseUrl + "games?id=" + gameIdListString;
-            var response = await client.GetStringAsync(url);
+            var response = await HTTPGetSafe(url);
             var games = JsonConvert.DeserializeObject<TwitchGames>(response);
 
             foreach (var twitchGame in games.data)
@@ -161,7 +274,7 @@ namespace TwitchGUI
                 return null;
 
             string url = TwitchApiBaseUrl + "users/follows?from_id=" + userId;
-            var response = await client.GetStringAsync(url);
+            var response = await HTTPGetSafe(url);
             var followedChannels = JsonConvert.DeserializeObject<TwitchFollowedChannels>(response);
 
             var channels = new List<TwitchChannel>();
@@ -174,6 +287,32 @@ namespace TwitchGUI
                 channels.Add(newChannel);
             }
             return channels;
+        }
+
+        private static async Task<string> HTTPGetSafe(string url)
+        {
+            var response = await client.GetAsync(url);
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await RefreshAccessToken();
+            }
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        private static void UpdateClientHeaders()
+        {
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Add("Client-ID", Settings.Instance.ClientID);
+            client.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", data.access_token));
+        }
+
+        private class TwitchOAuthData
+        {
+            public string access_token { get; set; }
+            public string refresh_token { get; set; }
+            public int expires_in { get; set; }
+            public List<string> scope { get; set; }
+            public string token_type { get; set; }
         }
     }
 }

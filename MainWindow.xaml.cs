@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace TwitchGUI
@@ -22,7 +24,7 @@ namespace TwitchGUI
             timer.Interval = TimeSpan.FromSeconds(60);
             timer.Tick += UpdateChannels;
             timer.IsEnabled = true;
-            UpdateChannels();
+            TwitchAPIInterface.Login();
         }
 
         public static void UpdateChannels()

@@ -11,9 +11,9 @@ namespace TwitchGUI
         public Toolbar()
         {
             InitializeComponent();
-            QualityComboBox.SelectedIndex= Settings.Instance.SelectedQualityIndex;
+            QualityComboBox.SelectedIndex = Settings.Instance.SelectedQualityIndex;
 
-            MainWindow.onChannelsUpdateStarted += () =>ProgressCircle.Visibility = Visibility.Visible;
+            MainWindow.onChannelsUpdateStarted += () => ProgressCircle.Visibility = Visibility.Visible;
             MainWindow.onChannelsUpdateFinished += () => ProgressCircle.Visibility = Visibility.Hidden;
         }
 
@@ -56,6 +56,11 @@ namespace TwitchGUI
         private void QualityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Settings.Instance.SelectedQualityIndex = QualityComboBox.SelectedIndex;
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            TwitchAPIInterface.Login();
         }
     }
 }

@@ -10,8 +10,13 @@ namespace TwitchGUI
 {
     public class Settings : INotifyPropertyChanged
     {
-        private ObservableCollection<TwitchChannel> channels = new ObservableCollection<TwitchChannel>();
-        public ObservableCollection<TwitchChannel> Channels => channels;
+        public ObservableCollection<TwitchChannel> Channels { get; } = new ObservableCollection<TwitchChannel>();
+
+        public string ClientID { get; set; }
+        public string ClientSecret { get; set; }
+
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenDate { get; set; }
 
         public string StreamlinkLocation { get; set; }
         public int SelectedQualityIndex { get; set; } = 6;
@@ -75,12 +80,16 @@ namespace TwitchGUI
             var loadedSettings = JsonConvert.DeserializeObject<Settings>(readSettings);
             if (loadedSettings != null)
             {
-                foreach (var loadedChannel in loadedSettings.channels)
+                foreach (var loadedChannel in loadedSettings.Channels)
                 {
                     Instance.Channels.Add(loadedChannel);
                 }
                 Instance.StreamlinkLocation = loadedSettings.StreamlinkLocation;
                 Instance.SelectedQualityIndex = loadedSettings.SelectedQualityIndex;
+                Instance.ClientID = loadedSettings.ClientID;
+                Instance.ClientSecret = loadedSettings.ClientSecret;
+                Instance.RefreshToken = loadedSettings.RefreshToken;
+                Instance.RefreshTokenDate = loadedSettings.RefreshTokenDate;
             }
         }
 
